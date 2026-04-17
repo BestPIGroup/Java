@@ -1,15 +1,70 @@
 package com.sptech.school;
 
+import com.sptech.school.config_jira.Jira;
+import com.sptech.school.config_slack.Slack;
+import org.json.JSONObject;
+
 import java.util.Random;
 import java.time.LocalDateTime;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // repetição pra mostrar quantos monitoramentos quiser
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             gerarMonitoramento();
             System.out.println("------------------------------------------------------------------");
+        }*/
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+
+            JSONObject json = new JSONObject();
+            JSONObject jsonMsg = new JSONObject();
+
+            System.out.println("Em qual servidor houve um erro?");
+            String server = scanner.nextLine();
+
+            System.out.println("Qual componente passou do limite?");
+            String componente = scanner.nextLine();
+
+            System.out.println("QUal a data?");
+            String data = scanner.nextLine();
+
+            System.out.println("Qual o valor da leitura");
+            String val = scanner.nextLine();
+
+            json.put("componente", componente);
+            json.put("data", data);
+            json.put("valor", val);
+            json.put("servidor", server);
+
+            jsonMsg.put("text", ":warning:ALERTA:warning:: \n" +
+                    "No servidor " + json.get("servidor") +
+                    " o componente " + json.get("componente") +
+                    " teve uma leitura de " + json.get("valor") + " na data " +
+                    json.get("data"));
+
+            Slack.sendMessage(jsonMsg);
+
+
+            String baseUrl = env.BASEURL.getValor();
+            String email = env.EMAIL.getValor();
+            String apiToken = env.APITOKEN.getValor();
+            Jira jira = new Jira(baseUrl, email, apiToken);
+
+            String response = jira.createIssue(
+                    "KAN",
+                    "Alerta: " + json.get("componente") +
+                            " com uma leitura de " + json.get("valor") +
+                            " no servidor "+ json.get("servidor"),
+                    "Task"
+            );
+
+            System.out.println(response);
+
         }
     }
 
