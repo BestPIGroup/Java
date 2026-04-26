@@ -25,7 +25,7 @@ public class Main {
             JSONObject json = new JSONObject();
             JSONObject jsonMsg = new JSONObject();
 
-            String[] servers = {"Servidor 1", "Servidor 2", "Servidor 3","Servidor 4", "Servidor 5"};
+            String[] servers = {"1", "2", "3","4", "5"};
             String server = servers[gerarRandom(5)];
 
             String[] componentes = {"CPU", "RAM", "DISCO"};
