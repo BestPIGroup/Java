@@ -12,7 +12,7 @@ target/
 *.iws
 *.iml
 *.ipr
-*src/main/java/com/sptech/school/env.java
+src/main/java/com/sptech/school/env.java
 
 ### Eclipse ###
 .apt_generated

@@ -6,35 +6,36 @@ import org.json.JSONObject;
 
 import java.util.Random;
 import java.time.LocalDateTime;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        // repetição pra mostrar quantos monitoramentos quiser
-        /*for (int i = 0; i < 4; i++) {
-            gerarMonitoramento();
-            System.out.println("------------------------------------------------------------------");
-        }*/
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.println(getTimestamp() + " Inicializando Geração de alertas");
+        Thread.sleep(3000);
 
         while (true) {
 
             JSONObject json = new JSONObject();
             JSONObject jsonMsg = new JSONObject();
 
-            System.out.println("Em qual servidor houve um erro?");
-            String server = scanner.nextLine();
+            String[] servers = {"Servidor 1", "Servidor 2", "Servidor 3","Servidor 4", "Servidor 5"};
+            String server = servers[gerarRandom(5)];
 
-            System.out.println("Qual componente passou do limite?");
-            String componente = scanner.nextLine();
+            String[] componentes = {"CPU", "RAM", "DISCO"};
+            String componente = componentes[gerarRandom(3)];
 
-            System.out.println("QUal a data?");
-            String data = scanner.nextLine();
+            String data = getTimestamp();
 
-            System.out.println("Qual o valor da leitura");
-            String val = scanner.nextLine();
+            String[] valores = {"75%","80%","85%","90%","95%","100%"};
+            String val = valores[gerarRandom(6)];
+
 
             json.put("componente", componente);
             json.put("data", data);
@@ -64,8 +65,28 @@ public class Main {
             );
 
             System.out.println(response);
-
+            Thread.sleep(30000);
         }
+    }
+
+    // Pegar data e hora formatada [yyyy-MM-dd HH:mm:ss]:
+    public static String getTimestamp() {
+        LocalDateTime now = LocalDateTime.now();
+
+        String padrao = "yyyy-MM-dd HH:mm:ss";
+        DateTimeFormatter formatarData = DateTimeFormatter.ofPattern(padrao);
+
+        String timestamp = now.format(formatarData);
+
+        String dataFormatada = "[" + timestamp + "]";
+        return dataFormatada;
+    }
+
+    public static int gerarRandom(int length){
+        Random random = new Random();
+
+        int randomInt = random.nextInt(length);
+        return randomInt;
     }
 
     public static void gerarMonitoramento() {
